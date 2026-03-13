@@ -1,0 +1,52 @@
+# helm search repo backstage/backstage
+# 2.6.3
+backstage:
+  image:
+    registry: ghcr.io
+    repository: liorabitbol/backstage-stacklayer
+    tag: latest
+    pullPolicy: Always
+
+  extraEnvVars:
+    - name: GITHUB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secrets
+          key: GITHUB_TOKEN
+    - name: BACKEND_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secrets
+          key: BACKEND_SECRET
+    - name: POSTGRES_HOST
+      value: backstage-postgresql
+    - name: POSTGRES_PORT
+      value: "5432"
+    - name: POSTGRES_USER
+      value: backstage
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: backstage-postgresql
+          key: password
+
+postgresql:
+  enabled: true
+  auth:
+    username: backstage
+    database: backstage
+  primary:
+    persistence:
+      enabled: true
+      storageClass: local-path
+      size: 2Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+  host: backstage.stacklayer.local
+  tls:
+    enabled: true
+    secretName: backstage-tls

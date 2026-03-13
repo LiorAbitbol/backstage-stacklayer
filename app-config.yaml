@@ -1,9 +1,9 @@
 app:
-  title: Scaffolded Backstage App
+  title: StackLayer Backstage
   baseUrl: http://localhost:3000
 
 organization:
-  name: My Company
+  name: StackLayer
 
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
@@ -93,6 +93,10 @@ catalog:
       target: ../../examples/org.yaml
       rules:
         - allow: [User, Group]
+
+    # hello-stacklayer GitHub repo
+    - type: url
+      target: https://github.com/liorabitbol/hello-stacklayer/blob/main/catalog-info.yaml
 
     ## Uncomment these lines to add more example data
     # - type: url
