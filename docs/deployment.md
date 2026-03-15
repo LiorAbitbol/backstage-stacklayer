@@ -59,6 +59,19 @@ kubectl create secret docker-registry ghcr-pull-secret \
   -n backstage
 ```
 
+### PostgreSQL secret
+
+The Helm chart uses this secret to initialize the database on first run. You choose the passwords here — they become the actual PostgreSQL passwords.
+
+```bash
+kubectl create secret generic backstage-postgresql \
+  --from-literal=password=<choose-a-password-for-backstage-user> \
+  --from-literal=postgres-password=<choose-a-password-for-postgres-superuser> \
+  -n backstage
+```
+
+> **Important:** This secret must exist _before_ ArgoCD deploys, because PostgreSQL uses it during `initdb`. If the secret is created after the PostgreSQL pod first starts, the passwords will not match and Backstage will fail to connect.
+
 > On PowerShell, replace `\` line continuations with a backtick `` ` ``.
 
 ---
@@ -99,6 +112,7 @@ Expected pods:
 | `CrashLoopBackOff` | Missing secret or bad config | Check logs: `kubectl logs -n backstage <pod>` |
 | Pod stuck `Pending` | PVC not bound | Check StorageClass `local-path` is installed |
 | Guest login fails | `backend.auth.keys` missing from config | Ensure `app-config.production.yaml` has the `auth.keys` section |
+| `password authentication failed` | `backstage-postgresql` secret created after PostgreSQL first started | Delete the PostgreSQL PVC, recreate the secret, and redeploy |
 
 ---
 
@@ -123,8 +137,8 @@ If you've made code changes and need to publish a new image:
 yarn install
 yarn build:backend
 
-# Build the Docker image
-docker build -t ghcr.io/liorabitbol/backstage-stacklayer:latest packages/backend
+# Build the Docker image (must run from repo root)
+docker build -t ghcr.io/liorabitbol/backstage-stacklayer:latest -f packages/backend/Dockerfile .
 
 # Push to ghcr.io (requires docker login)
 docker login ghcr.io -u liorabitbol -p <your-github-pat>
