@@ -9,6 +9,12 @@ backstage:
     pullSecrets:
       - ghcr-pull-secret
 
+  args:
+    - "--config"
+    - "app-config.yaml"
+    - "--config"
+    - "app-config.production.yaml"
+
   extraEnvVars:
     - name: GITHUB_TOKEN
       valueFrom:
