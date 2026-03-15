@@ -3,7 +3,6 @@ app:
 
 backend:
   baseUrl: https://backstage.stacklayer.local
-  listen: ':7007'
   auth:
     keys:
       - secret: ${BACKEND_SECRET}
