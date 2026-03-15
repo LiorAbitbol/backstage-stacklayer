@@ -9,7 +9,9 @@ backstage:
     pullSecrets:
       - ghcr-pull-secret
 
-  args:
+  command:
+    - "node"
+    - "packages/backend"
     - "--config"
     - "app-config.yaml"
     - "--config"
