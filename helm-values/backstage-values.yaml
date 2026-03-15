@@ -20,17 +20,6 @@ backstage:
         secretKeyRef:
           name: backstage-secrets
           key: BACKEND_SECRET
-    - name: POSTGRES_HOST
-      value: backstage-postgresql
-    - name: POSTGRES_PORT
-      value: "5432"
-    - name: POSTGRES_USER
-      value: backstage
-    - name: POSTGRES_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: backstage-postgresql
-          key: password
 
 postgresql:
   enabled: true
