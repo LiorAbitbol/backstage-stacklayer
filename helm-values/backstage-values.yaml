@@ -6,6 +6,8 @@ backstage:
     repository: liorabitbol/backstage-stacklayer
     tag: latest
     pullPolicy: Always
+    pullSecrets:
+      - ghcr-pull-secret
 
   extraEnvVars:
     - name: GITHUB_TOKEN
